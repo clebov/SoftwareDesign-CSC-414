@@ -16,7 +16,7 @@ def Choice(selection):
             9: 'not yet implemented',
             10: 'not yet implemented'
         }
-        return options.get(selection)
+        print(options.get(selection))
 
 
 def printMenu():
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     option = int(input())
     while option != -1:
         # call the Choice function and print the return
-        print(Choice(option))
+        Choice(option)
         # prompt the user for a selection
         printMenu()
         # read in the input as an integer and save it
