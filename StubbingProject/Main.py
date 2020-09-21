@@ -41,6 +41,7 @@ def Choice(selection):
             10: 'not yet implemented'
         }
         print(options.get(selection))
+<<<<<<< HEAD
 
 
 """
@@ -49,6 +50,8 @@ Created: 09/18/2020
 Author: Christopher Lebovitz
 Purpose: function to be used to print the menu
 """
+=======
+>>>>>>> master
 
 
 def printMenu():
