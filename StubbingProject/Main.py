@@ -43,12 +43,14 @@ def Choice(selection):
         print(options.get(selection))
 
 
+
 """
 Name: Choice
 Created: 09/18/2020
 Author: Christopher Lebovitz
 Purpose: function to be used to print the menu
 """
+
 
 
 def printMenu():
