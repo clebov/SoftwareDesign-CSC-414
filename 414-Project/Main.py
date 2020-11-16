@@ -49,7 +49,7 @@ Purpose: based off of the selection return a tuple of the data needed
 """
 
 
-def Choice(selection, combo):
+def choice(selection, combo):
     if int(selection) == 4 or int(selection) == 5 or int(selection) == 6 or int(selection) == 10:
         return combo.get(int(selection)).__getitem__('order'), combo.get(int(selection)).__getitem__(
             'price'), combo.get(int(selection)).__getitem__('ticket')  # return a tuple of the order, price, and ticket
@@ -72,7 +72,7 @@ Purpose: function to be used to print the menu
 """
 
 
-def printMenu():
+def print_Menu():
     # Print the menu to the user
     print("\t\t****All combos comes with fries and a drink. the garden salad comes with a drink****\n")
     print("1: Small Burger Combo \n2: Medium Burger Combo \n3: Large Burger Combo \n4: 3 Tender Combo \n"
@@ -95,14 +95,15 @@ def print_Order(order):
         print('There is nothing in the cart\n')
     else:  # else print the content of the list and give tax and total
         for x in order:  # for every order in the list
-            print(x[0] + '\t------- ' + str(x[1]))
+            print(x[0] + str(x[1]).rjust(37 - len(x[0]), ' '))
             total += x[1]
         tax = total * .07  # calculate the tax
         tax = round(tax, 2)  # round it to the nearest 2 decimal places
         total = tax + total  # add it to the total
         total = round(total, 2)  # round total to the nearest 2 decimal places
-        print("Current Tax\t\t-------", tax)
-        print("Current Total\t\t-------", total)
+        print('----------------------------------------')
+        print("Current Tax", str(tax).rjust(25, ' '))
+        print("Current Total", str(total).rjust(23, ' '))
 
 
 """
@@ -148,7 +149,7 @@ Purpose: function to create the ticket that is sent to the kitchen.
 """
 
 
-def send_ticket(order):
+def send_Ticket(order):
     f = open('ticket.txt', 'w')
     temp = ()  # create a temp tuple to store each individual tuple in the order list
     for item in order:
@@ -191,31 +192,35 @@ Purpose: function to process the payment receded by the customer (cash  only)
 
 
 def pay(total, order, f):
+
     print('Your total is: ' + str(total))  # give the total to the customer
     payment = input('please enter payment amount: ')  # prompt for payment
-    payment = round(float(payment), 2)  # round payment to the nearest 2 decimal places
+    if payment.isdecimal() and float(payment) < 1000:
+        payment = round(float(payment), 2)  # round payment to the nearest 2 decimal places
+        while total > 0:  # while the total is greater than 0
+            if payment > total:  # if they payment is larger than total
+                payment = payment - total  # calculate the change
+                print('Change: ', round(payment, 2))  # output change
+                break  # break loop since the payment is over amount due
+            elif total == 0:  # if total is 0 the amount due has been paid.
+                break
+            elif payment == total:  # if payment == total then exact amount has been received
+                break
+            else:  # else the payment is less than the total. keep asking for payment until one of the other conditions is meet
+                total = total - payment
+                total = round(total, 2)  # round total to the nearest 2 decimal places
+                payment += round(payment, 2)
+                print('Amount due: ' + str(total))
+                payment = round(float(input('please enter payment amount: ')), 2)
 
-    while total > 0:  # while the total is greater than 0
-        if payment > total:  # if they payment is larger than total
-            payment = payment - total  # calculate the change
-            print('Change: ', payment)  # output change
-            break  # break loop since the payment is over amount due
-        elif total == 0:  # if total is 0 the amount due has been paid.
-            break
-        elif payment == total:  # if payment == total then exact amount has been received
-            break
-        else:  # else the payment is less than the total. keep asking for payment until one of the other conditions is meet
-            total = total - payment
-            total = round(total, 2)  # round total to the nearest 2 decimal places
-            payment += round(payment, 2)
-            print('Amount due: ' + str(total))
-            payment = round(float(input('please enter payment amount: ')), 2)
-
-    send_ticket(order)  # call the sent_ticket function to send the order to the kitchen
-    f.write('\n----------------------------------------')
-    f.write('\nPayment' + str(payment).rjust(30, ' '))
-    os.startfile('receipt.txt')
-    f.close()
+        send_Ticket(order)  # call the sent_ticket function to send the order to the kitchen
+        f.write('\n----------------------------------------')
+        f.write('\nPayment' + str(round(payment, 2)).rjust(30, ' '))
+        os.startfile('receipt.txt')
+        f.close()
+        order.clear()
+    else:
+        print('Input Error please begin transaction again.')
 
 
 if __name__ == "__main__":
@@ -233,7 +238,7 @@ if __name__ == "__main__":
         print(
             "Welcome to the Cafeteria please select a food Combo below. type exit to quit program,"
             " c for cart, and cancel to cancel order")
-        printMenu()
+        print_Menu()
         # take in user input and covert it to lower string
         option = input().lower()
         # validate input and call the appropriate input
@@ -254,13 +259,18 @@ if __name__ == "__main__":
         elif option == 'exit':  # if exit is entered quit the program
             break
         elif option == 'r':  # if r is entered call process_Receipt, increment order number, and clear the order list
-            process_Receipt(orders, order_Num)
-            order_Num += 1
-            orders.clear()
-        elif 1 <= int(option) <= 10:  # validate that the user enters the correct choice number
-            orders.append(Choice(option, options))
+            if orders:
+                process_Receipt(orders, order_Num)
+                order_Num += 1
+            else:
+                print('Nothing is ordered')
+        elif option.isdigit():
+            if 1 <= int(option) <= 10:  # validate that the user enters the correct choice number
+                orders.append(choice(option, options))
+            else:
+                print("option is invalid please choose a different option")
         else:  # if user enters anything other than the acceptable input print an error and ask for input again
             print("option is invalid please choose a different option")
-        time.sleep(.5)
+        time.sleep(1)
 
         # prompt the user for a selection

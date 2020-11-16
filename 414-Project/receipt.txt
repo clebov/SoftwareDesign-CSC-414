@@ -1,13 +1,9 @@
 		Thank you!
 	Your order number is: 2
-Transaction number      9314
+Transaction number      2602
 
 Small Burger Combo               8.99
-Medium Burger Combo             12.99
-Garden Salad                    10.99
 ----------------------------------------
-Subtotal                        32.97
-Tax                              2.31
-Total                           35.28
-----------------------------------------
-Payment                         35.28
+Subtotal                         8.99
+Tax                              0.63
+Total                            9.62

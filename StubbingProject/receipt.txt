@@ -1,0 +1,12 @@
+		Thank you!
+	Your order number is: 3
+Transaction number       451
+
+Large Burger Combo              14.99
+Medium Burger Combo             12.99
+----------------------------------------
+Subtotal                        27.98
+Tax                              1.96
+Total                           29.94
+----------------------------------------
+Payment                          0.06
